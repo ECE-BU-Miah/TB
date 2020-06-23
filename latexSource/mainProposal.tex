@@ -1,0 +1,196 @@
+\documentclass[12pt]{article}
+\def\name{Suruz Miah}
+\def\grantName{TeeJet Adaptive Controls Research Project~--~2020}
+\def\proposalTitle{Model-Free Adaptive Flow Rate Control of Heterogeneous Agricultural
+  Spraying Machines}
+
+
+\def\dept{Electrical and Computer Engineering Department}
+\def\college{Caterpillar College of Engineering and Technology}
+\def\uName{Bradley University}
+
+\usepackage[utf8]{inputenc}
+\usepackage[dvipsnames]{xcolor}
+\oddsidemargin=-0.2in % -.3 for a4 paper
+\evensidemargin=.5in
+\textwidth=7.0in
+\topmargin=-0.5in
+\textheight=9.0in
+\parindent=.2in
+\newcommand{\vsmallskip}[0]{}
+\newcommand{\midskip}[0]{\vspace{3mm}}
+\newcommand\todoin[2][]{\todo[inline, caption={2do}, #1]{ \begin{minipage}{\textwidth-4pt}#2\end{minipage}}}
+
+
+\usepackage{fancyhdr,lastpage}
+\usepackage{hyperref}
+\hypersetup{
+    % pdfmenubar=true,        % show Acrobats menu?
+    % pdffitwindow=false,     % window fit to page when opened
+    % pdfstartview={FitH},    % fits the width of the page to the window
+    % pdfnewwindow=true,      % links in new window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,          % color of internal links
+    citecolor=red,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=blue           % color of external links
+  }
+  
+\usepackage{amsmath,amssymb,bm}
+\usepackage{graphicx}
+\usepackage{rotating}
+% \epstopdfsetup{suffix=}
+\usepackage[nottoc,notlot,notlof]{tocbibind} % include References in table of contents
+%\usepackage[table,usenames,dvipsnames]{xcolor}
+\usepackage{xtab}
+\usepackage{siunitx}
+\sisetup{unitsep=\cdot}
+\usepackage{setspace}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage[english,algo2e,algoruled,vlined,linesnumbered]{algorithm2e}   % package for algorithm
+\usepackage{booktabs}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{pgfgantt} % package for gantt chart
+\usepackage{easyReview}
+\usepackage{enumerate}
+
+\usepackage{tikz}
+% load libraries
+\usetikzlibrary{backgrounds,calc,patterns,decorations.pathmorphing,decorations.markings,shapes,arrows,snakes,tikzmark}
+\usepackage[siunitx,smartlabels]{circuitikz}
+\def\smgrid{0.5}
+
+
+% %% For Preview-latex using C-c C-p  commands. 
+% \usepackage[active,displaymath,sections,graphics,floats]{preview}
+% % \usepackage[active,displaymath,textmath,sections,graphics,floats]{preview}
+% \PreviewEnvironment{enumerate}  % enumerate environment in the preview
+% \PreviewEnvironment{tikzpicture} % tikzpicture in the preview 
+
+
+%\doublespacing
+%\onehalfspacing
+\title{\proposalTitle}
+
+%\title{Time--Invariant Partially-Observed Feedback Control Operator for a Class of Uncertain Nonlinear Systems}
+%\author{Suruz Miah\thanks{Suruz Miah is with the Electrical and Computer Engineering Department of Bradley University, Peoria, IL, 61625, USA. E-mail: \href{mailto:smiah@bradley.edu}{smiah@bradley.edu}, phone: +1 (306) 677--2260}
+%}
+
+
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\lhead{S.~Miah,~K.~Vonckx}
+\chead{ECE Department}
+\rhead{\uName}
+
+\cfoot{%\hspace{\footpageshift}%
+       \parbox{4in}{\, \hfill Page~ %
+                    \arabic{page} of \protect\pageref*{LastPage} % +LP
+%                    \arabic{page}                               % -LP
+                    \hfill \,}}
+%\lfoot{\grantName}   % header at lower left corner
+\lfoot{Application Data Management}   % header at lower left corner
+\rfoot{Control System Technology}   % header at lower right corner
+
+
+\begin{document}
+\centerline{\href{http://www.bradley.edu}{\includegraphics[height=0.5in]{figs/logoBU1-Print}}\hfill\href{https://www.teejet.com/}{\includegraphics[height=1.0in]{figs/TeeJet-Logo}}}
+
+\begin{center}
+\vspace*{1.0cm}
+{\LARGE \grantName}
+
+
+\vspace*{0.25cm}
+
+{\LARGE \textsc{Project Statement}}
+
+\vspace*{0.5cm}
+
+% \normalsize
+% Thesis submitted to the\\
+% Faculty of Graduate and Postdoctoral Studies\\
+% In partial fulfillment of the requirements\\
+% For the degree \degreePhD~ in\\
+% \nameofprogram\\
+\vspace*{1.5cm}
+{\color{BrickRed}
+\hrule height 1.5pt
+\midskip
+}
+%\begin{flushleft}
+{\LARGE 
+% \textsc{Title:} 
+\proposalTitle
+}
+%\end{flushleft}
+\midskip
+{\color{BrickRed}
+\hrule height 1.5pt
+\midskip
+}
+\vspace*{0.01cm}
+\begin{flushright}
+{\large
+ Principal Investigator (PI):  Dr.~\href{http://personalpages.bradley.edu/~smiah}{Suruz \textsc{Miah}}\\
+ Research Partner: Ken \textsc{Vonckx}, TeeJet Technology
+  % Technical Adviser: Dr. Kaisar R.  \textsc{Khan}\\  
+}
+\end{flushright}
+
+\vspace*{1.0cm}
+\begin{flushleft}
+{\color{BrickRed}
+{\Large \textsc{Contact Information}}\\
+\vskip10pt
+\hrule height 1pt
+\midskip
+}
+\vskip10pt
+Dr. Suruz Miah\\
+Assistant Professor\\
+\dept\\
+\college\\
+\href{http://www.bradley.edu/}{\uName}\\
+\vskip10pt
+Business and Engineering Convergence Center \#4269 \\
+1501 W. Bradley Avenue\\
+Peoria, IL, 61625, USA\\
+\vskip10pt
+Phone:~+1 (309) 677--2260\\
+e-Mail:~\href{mailto:smiah@bradley.edu}{smiah@bradley.edu}\\
+Website:~\href{http://personalpages.bradley.edu/~smiah/}{http://personalpages.bradley.edu/\~~smiah/}
+\vskip15pt
+\end{flushleft}
+
+\end{center}
+\thispagestyle{empty}
+\newpage
+
+%\date{ }
+%\maketitle
+%
+%\thispagestyle{fancy} % shows header and footer on all the  pages (including first page)
+%\thispagestyle{empty}
+\pagestyle{fancy}
+
+ \renewcommand{\contentsname}{Table of Contents}
+ \tableofcontents 
+ \listoffigures
+ 
+\newpage
+
+\input{latex/tb-proposal.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{bib/refsEnergy.bib,bib/refsSuruzWeb}
+\end{document}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
