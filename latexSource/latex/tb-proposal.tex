@@ -27,7 +27,7 @@ All sprayers have a pump that forces chemical from a tank through hydraulic plum
 Across the boom are a number of nozzles that serve as the exit point for fluid.  These nozzles also have a solenoid that can open or close the valve.  By applying a PWM signal, we can \todo{$\ldots$ continue} When spaying, the farmer is limited to how fast he/she can drive and apply the correct amount of chemical without increase. In a sprayer application, we have two separate discrete-time feedback control systems to solve these problems.
 
 \begin{enumerate}
-\item One system controls to a desired flow rate.  This system ensures the correct amount of fluid is applied to the field.  Target flow is calculated by the prescription for the field and the speed of the vehicle. 
+\item One system controls to a desired flow rate\todo{Add unit}.  This system ensures the correct amount of fluid is applied to the field.  Target flow is calculated by the prescription for the field and the speed of the vehicle. 
 
 \item A second system controls to a constant pressure across the boom of a sprayer.  Droplet size directly correlates to pressure and can be determined from the nozzle’s datasheet.  This ensures proper application of the fluid and prevents drift due to atmospheric conditions.  
 
