@@ -8,7 +8,7 @@
 \section{Background}
 \label{sec:background}
 
-Agricultural Spraying machines are used to apply chemical to farmland to increase the productivity of the land.  Fertilizer increases yield by $40\%$ to $60\%.$  If pesticides are not used, yield decreases by $50\%$ to $90\%.$  To maximize these yields, the correct amount of chemical must be applied to the correct area of the plant or soil. Chemical is applied using sprayers which are connected to a pump through plumbing system. A two-way plumbing diagram of an agricultural spraying machine is shown in Figure~\ref{fig:twoWayPlumbingDiagramSrayingMachine}\todo{Illustrate this figure}.
+Agricultural Spraying machines are used to apply chemicals to farmland to increase the productivity of the plants.  Fertilizer increases yield by $40\%$ to $60\%.$  If pesticides are not used, yield decreases by $50\%$ to $90\%.$\todo{Dr. Miah, Do we need a reference here?}  To maximize these yields, the correct amount of chemical must be applied to the correct area of the plant or directly to the soil. 
 %
 \begin{figure}
   \centering
@@ -17,28 +17,36 @@ Agricultural Spraying machines are used to apply chemical to farmland to increas
   \label{fig:twoWayPlumbingDiagramSrayingMachine}
 \end{figure}
 
+A two-way plumbing diagram of an agricultural spraying machine is shown in Figure~\ref{fig:twoWayPlumbingDiagramSrayingMachine}.  Chemical is added to water to the tank of the sprayer to dilute the chemical to the proper concentration. When the pump is engaged, fluid flows from the bottom of the tank to the pump through \textbf{Maunual Shutoff Valve C}, \textbf{Line Strainer J} and into the pump. In some sprayers, the speed of the pump can be changed. Here, fluid can flow in a number of directions depending on the configuration of the Sprayer. 
+
+Fluid can flow back to the tank to agitate or mix the chemical into the water so that sediment does not form at the bottom of the tank.  This is manually changes by moving the position of \textbf{Throttling Valve D}. If too much pressure builds up in the system, \textbf{Pressure Relief Valve F} opens to prevent system damage. The amount of fluid pumped out to the boom can be changed by opening or closing \textbf{Electric Regulating Valve E}. This is typically controlled by an embedded system. The amount of fluid pumped out to the boom is measured by the \textbf{Flowmeter G}.  The flow rate measured by \textbf{Flowmeter G} indicates how much fluid is being applied to the farmland. 
+
+The boom is split into sections containing consecutive groups of nozzles. Boom sections can be turned on and off by\textbf{ Boom Control Manifold H}. Fluid exits the boom from the \textbf{Nozzle Bodies and Spray Tips I}. The mechanics of the nozzles create a spray when exiting the boom. Droplet size if a function of the pressure across the boom.  \textbf{Nozzle Bodies and Spray Tips I} have a solenoid attach that opens or closes the valve as shown in Figure~\ref{fig:SprayPattern} \todo{Image take from web - needs to be remade}.  By applying a PWM signal, we can control the pressure across the boom without impacting the flow rate.
+%
+\begin{figure}
+  \centering
+  \includegraphics[width=0.7\textwidth]{figs/img/PWM-valve}
+  \caption{Nozzle Body Spray Pattern when Applied a PWM Signal.}
+  \label{fig:SprayPattern}
+\end{figure}
 
 
 \section{Problem Statement and Objectives}
 \label{sec:probl-stat-object}
 
-All sprayers have a pump that forces chemical from a tank through hydraulic plumbing leading to the boom of the sprayer \add{(see Figure~\ref{fig:twoWayPlumbingDiagramSrayingMachine})}.  Flow to the boom can be changed by either changing the speed of the pump or by opening and closing a regulation valve.
-
-Across the boom are a number of nozzles that serve as the exit point for fluid.  These nozzles also have a solenoid that can open or close the valve.  By applying a PWM signal, we can \todo{$\ldots$ continue} When spaying, the farmer is limited to how fast he/she can drive and apply the correct amount of chemical without increase. In a sprayer application, we have two separate discrete-time feedback control systems to solve these problems.
+Farming chemicals are regulated by the government which certifies the chemical for certain droplet sizes. This limits the farmer to how fast the vehicle can drive and apply the correct amount of chemical without an increase in pressure to achieve the same flow rate [L/ha]. In a sprayer application, we have two separate discrete-time feedback control systems to solve these problems:
 
 \begin{enumerate}
-\item One system controls to a desired flow rate\todo{Add unit}.  This system ensures the correct amount of fluid is applied to the field.  Target flow is calculated by the prescription for the field and the speed of the vehicle. 
+\item \textbf{Rate Controller}: this system controls to a desired flow rate [L/ha].  This system ensures the correct amount of fluid is applied to the field.  Target flow is calculated by the prescription for the field, the speed of the vehicle, and the length of the boom. 
 
-\item A second system controls to a constant pressure across the boom of a sprayer.  Droplet size directly correlates to pressure and can be determined from the nozzle’s datasheet.  This ensures proper application of the fluid and prevents drift due to atmospheric conditions.  
+\item \textbf{Droplet Size Controller}: this system controls to a constant pressure across the boom of a sprayer.  Droplet size directly correlates to the pressure across the boom. This can be determined from the nozzle’s datasheet (see TeeJet product catalog).  This ensures proper application of the fluid and prevents drift due to atmospheric conditions.  
 
 \end{enumerate}
 
-Flow rate controllers, pressure controllers, and sprayers can all be manufactured by  different companies.  This makes it very difficult to come up 
-with a design that will \replace{preform}{perform} well across different
-scenarios.  \add{Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the
-  block diagram of a two-input two-output discrete-time control system block
-  diagram, where  $D_2(z),$ $G(z),$ $x_2^{[d]},$ and $x_2$ are assumed to be
-  unknown.} %
+Flow rate controllers and sprayers can all be manufactured by different companies.  This makes it very difficult to come up 
+with a Droplet Size Controller design that will perform on all machines without developing a unique system for every configuration.
+
+Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the block diagram of a two-input two-output discrete-time control system block diagram, where  $D_2(z),$ $G(z),$ $x_2^{[d]},$ and $x_2$ are assumed to be unknown.
 %
 
 \begin{figure}
@@ -50,8 +58,8 @@ scenarios.  \add{Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the
       \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
       % Place nodes
       \node[sum](sum){$\sum$};
-      \node[block, text width=1.5 cm, text centered, right of = sum, node distance=3 cm](D1){Controller $D_1(z)$};
-      \node[block, text width=1.5 cm, text centered, below of = D1, node distance=2 cm](D2){Controller $D_2(z)$};
+      \node[block, text width=2 cm, text centered, right of = sum, node distance=3 cm](D1){Droplet Size (Pressure) Controller $D_1(z)$};
+      \node[block, text width=2 cm, text centered, below of = D1, node distance=2 cm](D2){Flow Rate Controller $D_2(z)$};
       \node[sum, left of = D2, node distance=2.0 cm](sum3){$\sum$};
       \node[block, text width=1 cm, text centered, right of = D2, node distance=4.5 cm](G){Plant $G(z)$};      
       \node[block, text width=1.5 cm, text centered, below right of = D2, node distance=3.0 cm](H2){Flow meter $H_2(z)$};
@@ -65,7 +73,7 @@ scenarios.  \add{Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the
       \draw
       (sum.-165)node[left]{$+$};
       \draw[latex-]
-      (sum3.west)-- node[midway,above]{$x_2^{[d]}$}++(-4*\smgrid,0)node[anchor=east]{Target flow};
+      (sum3.west)-- node[midway,above]{$x_2^{[d]}$}++(-4*\smgrid,0)node[anchor=east]{Target flow rate};
       \draw
       (sum3.-165)node[left]{$+$};
       
@@ -78,7 +86,7 @@ scenarios.  \add{Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the
       \draw[-latex]
       (D2.15) --++(2*\smgrid,0)|- node[near end,above]{$u_2$}(G.west);
       \draw[-latex]
-      (D2.-15) -|node[very near end,right]{$u_3$}++(2*\smgrid,-1.5*\smgrid)-| (G.south);
+      (D2.-15) -|node[very near end,right]{$u_3$ (optional)}++(2*\smgrid,-1.5*\smgrid)-| (G.south);
 
       \draw[-latex]
       (G.20) -- ++(3*\smgrid,0)node[above,right]{$Y_1(z)$};
@@ -124,41 +132,41 @@ scenarios.  \add{Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the
   \centering
   \caption{Description of signals used in the control system block diagram shown in Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem}.}
   \label{tab:signalDescription}
-  \begin{tabular}{ll}
+  \begin{tabular}{lll}
     \toprule[1.5pt]
-    Signal& Description\\
+    Signal& Description& Unit\\
     \toprule
-    $x_1^{[d]}$ & Target pressure\\
-    $x_2^{[d]}$ & Target flow\\
-    $x_1$ & Actual pressure\\
-    $x_2$ & Actual flow\\
-    $D_1(z)$ & Pressure controller \add{transfer function}\\
-    $D_2(z)$ & Flow controller \add{transfer function}\\
-    $u_1$ & Duty cycle to solenoids (limited between $0$ and $100$)\\
-    $u_2$ & Open/close signal for regulating valve\\
-    $u_3$ & Pump speed (optional)\\
-    $G(z)$ & Plant model\\
-    $H_1(z)$ & Pressure sensor model (transfer function)\\
-    $H_2(z)$ & Flow meter model (transfer function)\\
-    $w_1$ & Pressure sensor noise\\
-    $w_2$ & Flow meter noise\\
+    $x_1^{[d]}$ & Target pressure & [Bar]\\
+    $x_2^{[d]}$ & Target flow rate& [L/ha]\\
+    $x_1$ & Actual pressure & [Bar]\\
+    $x_2$ & Actual flow rate& [L/ha]\\
+    %$D_1(z)$ & Pressure controller (transfer function)\\
+    %$D_2(z)$ & Flow controller (transfer function)\\
+    $u_1$ & Duty cycle to solenoids (limited between $0$ and $100$)& [\%]\\
+    $u_2$ & Open/close signal for regulating valve& [V]\\
+    $u_3$ & Pump speed (optional)& [rev/sec]\\
+    %$G(z)$ & Plant model\\
+    %$H_1(z)$ & Pressure sensor model (transfer function)\\
+    %$H_2(z)$ & Flow meter model (transfer function)\\
+    $w_1$ & Pressure sensor noise& [V]\\
+    $w_2$ & Flow meter noise& [V]\\
     \bottomrule[1.5pt]
   \end{tabular}
 \end{table}
 %
 
-{\bf Problem statement:} Develop a control system that can adapt to different plant models and \comment{rate controllers.}{Do you mean flow rate and target pressure controllers?}
+{\bf Problem statement:} Develop a control system for the Droplet Size (Pressure) Controller ($D_1(z)$) that can adapt to different plant models and rate controllers.
 
 {\bf Outcomes:}
 
-\textit{TeeJet} expects design of a  control system that can adapt to: %
+\textit{TeeJet} expects design of a control system that can: %
 \begin{enumerate}
-\item Different plant models
-  
-\item Different rate controllers 
+\item adapt to different plant models
+\item adapt to different rate controllers 
+\item preforms better than current (PID) control
 \end{enumerate}
 
-\textit{Student experience}  are expected to learn the following items that pertain to proposed control system:
+\textit{Student experience} are expected to learn the following items that pertain to proposed solution:
 \begin{enumerate}
 \item Design the control system that is ready for implementation
   
@@ -175,6 +183,65 @@ scenarios.  \add{Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the
 
 Model-Free Reinforcement Learning Control Approach
 
+Plant will be modeled using a state-space approach:
+\begin{equation}
+    \dot{x} = Ax + Bu \\
+\end{equation}
+
+\begin{equation}
+    y = Cx + Du
+\end{equation}
+
+\begin{align*}
+\begin{bmatrix}
+    \dot x_1 \\
+    \dot x_2
+\end{bmatrix}&=
+\begin{bmatrix}
+    a_{11} &  a_{12} \\
+    a_{21} &  a_{22}
+\end{bmatrix} 
+%\label{eq:stateMatrix} 
+\begin{bmatrix}
+     x_1 \\
+     x_2
+\end{bmatrix}
++
+%\label{eq:matrixB}
+\begin{bmatrix}
+    b_{11} & b_{12} \\
+    b_{21} & b_{22} \\
+    b_{31} & b_{32}
+\end{bmatrix}
+%\label{eq:inputMatrix}
+\begin{bmatrix}
+    u_1 \\
+    u_2 \\
+    u_1 
+\end{bmatrix}
+\end{align*}
+
+
+%Flow is typically measured in liters per hectare [L/ha].  This measurement take the length of the boom inconsideration.  For liter per minute [L/min]
+
+%\begin{equation}
+%    G(z) = \frac{num}{den}
+%\end{equation}
+
+where the coeffiecients of A and B are unknown.
+
+$u_1$ is our control signal which will be converted to a PWM signal when sent to the nozzle drivers over the local CAN bus. Let the PWM frequency = 20Hz.
+
+%$D_1(z)$ & Pressure controller (transfer function)\\
+%$D_2(z)$ & Flow controller (transfer function)\\
+%$G(z)$ & Plant model\\
+%$H_1(z)$ & Pressure sensor model (transfer function)\\
+%$H_2(z)$ & Flow meter model (transfer function)\\
+
+%$\dot{x} = Ax + Bu$
+%$y = Cx + Du$
+
+The solution will be implemented on an embedded system \todo{TeeJet ECU or Raspberry Pi?}.
 
 \section{Deliverables}
 \label{sec:deliverables}
