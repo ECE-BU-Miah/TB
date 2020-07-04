@@ -195,23 +195,34 @@ Plant will be modeled using a state-space approach:
 \begin{align*}
 \begin{bmatrix}
     \dot x_1 \\
-    \dot x_2
+    \dot x_2\\
+    \dot x_3\\
+    \dot x_4\\
+    \dot x_5
 \end{bmatrix}&=
 \begin{bmatrix}
-    a_{11} &  a_{12} \\
-    a_{21} &  a_{22}
+  a_{11} &  a_{12}&  a_{13}&  a_{14}&  a_{15} \\
+  a_{21} &  a_{22}&  a_{23}&  a_{24}&  a_{25} \\  
+  a_{31} &  a_{32}&  a_{33}&  a_{34}&  a_{35} \\  
+  a_{41} &  a_{42}&  a_{43}&  a_{44}&  a_{45} \\  
+  a_{51} &  a_{52}&  a_{53}&  a_{54}&  a_{55} \\  
 \end{bmatrix} 
 %\label{eq:stateMatrix} 
 \begin{bmatrix}
      x_1 \\
-     x_2
+     x_2\\
+     x_3\\
+     x_4\\
+     x_5
 \end{bmatrix}
 +
 %\label{eq:matrixB}
 \begin{bmatrix}
-    b_{11} & b_{12} \\
-    b_{21} & b_{22} \\
-    b_{31} & b_{32}
+    b_{11} & b_{12} & b_{13}\\
+    b_{21} & b_{22} & b_{23}\\
+    b_{31} & b_{32} & b_{33}\\
+    b_{41} & b_{42} & b_{43}\\
+    b_{51} & b_{52} & b_{53}   
 \end{bmatrix}
 %\label{eq:inputMatrix}
 \begin{bmatrix}
@@ -220,6 +231,14 @@ Plant will be modeled using a state-space approach:
     u_1 
 \end{bmatrix}
 \end{align*}
+%
+where the coeffiecients of A and B are unknown.
+\todo[inline]{Approximate numerical value of A matrix}
+\todo[inline]{Approximate numerical value of B matrix}
+\todo[inline]{OPTIONAL: description of $x_1,$ $x_2, \ldots$}
+
+\todo[inline]{Provide realistic value of target pressure (in PSI)}
+\todo[inline]{Provide realistic value of target flow rate (in Gal/Acre)}
 
 
 %Flow is typically measured in liters per hectare [L/ha].  This measurement take the length of the boom inconsideration.  For liter per minute [L/min]
@@ -228,7 +247,7 @@ Plant will be modeled using a state-space approach:
 %    G(z) = \frac{num}{den}
 %\end{equation}
 
-where the coeffiecients of A and B are unknown.
+
 
 $u_1$ is our control signal which will be converted to a PWM signal when sent to the nozzle drivers over the local CAN bus. Let the PWM frequency = 20Hz.
 
