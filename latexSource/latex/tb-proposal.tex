@@ -136,15 +136,15 @@ Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the block diagram of a 
     \toprule[1.5pt]
     Signal& Description& Unit\\
     \toprule
-    $x_1^{[d]}$ & Target pressure & [Bar]\\
-    $x_2^{[d]}$ & Target flow rate& [L/ha]\\
-    $x_1$ & Actual pressure & [Bar]\\
-    $x_2$ & Actual flow rate& [L/ha]\\
+    $x_1^{[d]}$ & Target pressure & [psi]\\
+    $x_2^{[d]}$ & Target flow rate& [GPA]\\
+    $x_1$ & Actual pressure & [psi]\\
+    $x_2$ & Actual flow rate& [GPA]\\
     %$D_1(z)$ & Pressure controller (transfer function)\\
     %$D_2(z)$ & Flow controller (transfer function)\\
     $u_1$ & Duty cycle to solenoids (limited between $0$ and $100$)& [\%]\\
     $u_2$ & Open/close signal for regulating valve& [V]\\
-    $u_3$ & Pump speed (optional)& [rev/sec]\\
+    $u_3$ & Pump speed (optional)& [rev/min]\\
     %$G(z)$ & Plant model\\
     %$H_1(z)$ & Pressure sensor model (transfer function)\\
     %$H_2(z)$ & Flow meter model (transfer function)\\
@@ -163,7 +163,6 @@ Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the block diagram of a 
 \begin{enumerate}
 \item adapt to different plant models
 \item adapt to different rate controllers 
-\item preforms better than current (PID) control
 \end{enumerate}
 
 \textit{Student experience} are expected to learn the following items that pertain to proposed solution:
@@ -183,62 +182,124 @@ Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the block diagram of a 
 
 Model-Free Reinforcement Learning Control Approach
 
-Plant will be modeled using a state-space approach:
-\begin{equation}
-    \dot{x} = Ax + Bu \\
-\end{equation}
+The control system of the Droplet Size controller can be simplified as in Figure~\ref{fig:DropletSize-ControlSystem}.
+%
+\begin{figure}
+  \centering
+  \begin{tikzpicture}    
+      \tikzstyle{every node} = [font=\footnotesize]
+      \tikzstyle{block} = [draw, rectangle, fill=blue!15, rounded corners, minimum height=0.5 cm, minimum width=1.0 cm]
+      \tikzstyle{sum} = [draw, circle, fill=blue!15];
+      \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+      % Place nodes
+      \node[sum](sum){$\sum$};
+      \node[block, text width=2 cm, text centered, right of = sum, node distance=3 cm](D1){Droplet Size (Pressure) Controller $D_1(z)$};
+      \node[block, text width=1 cm, text centered, right of = D1, node distance=4.5 cm](G){Plant $G(z)$};      
+      \node[block, text width=1.5 cm, text centered, below of = D1, node distance=3.0 cm](H1){Pressure sensor $H_1(z)$};
+      \node[sum, right of = H1, node distance=2 cm](sum1){$\sum$};      
 
-\begin{equation}
-    y = Cx + Du
-\end{equation}
+      % Connections 
+      \draw[latex-]
+      (sum.west)-- node[midway,above]{$x_1^{[d]}$}++(-2*\smgrid,0)node[anchor=east]{Target pressure};
+      \draw
+      (sum.-165)node[left]{$+$};
+      \draw[-latex]
+      (sum.east) -- node[midway,above]{$e_1$}(D1.west);
+      \draw[-latex]
+      (D1.east) -- node[near start,above]{$u_1$} (G.west);
+
+      \draw[-latex]
+      (G.20) -- ++(3*\smgrid,0)node[above,right]{$Y_1(z)$};
+      \draw[-latex]
+      ($(G.20) + (1.5*\smgrid,0)$)node[fill,circle,inner sep=1.5pt]{} |- (sum1.east)node[very near end,below]{$+$};
+      
+      \draw[-latex]
+      (sum1.west) -- (H1.east);
+      \draw[-latex]
+      (H1.west) -|node[near start,above]{$x_1$} (sum.south)node[anchor=north east]{$-$}; 
+
+      \draw[latex-]
+      (sum1.south) -- ++(0,-\smgrid)node[below]{$w_1$};
+      \draw
+      ($(sum1.-90)+(0.05*\smgrid,-0.2*\smgrid)$)node[below,right]{$+$};
+      
+      % Layers
+      \begin{pgfonlayer}{background}
+        \filldraw[fill=yellow!10,draw = blue,dashed,very thick, rounded corners]
+        ($(sum.north west) + (-1.9*\smgrid,2*\smgrid)$) rectangle ($(sum1.north east)+(3.5*\smgrid,-2.2*\smgrid)$);
+      \end{pgfonlayer}
+      \draw
+      ($(D1.north)+(\smgrid,\smgrid)$)node[]{\textcolor{blue}{{\bf Discrete-time control system}}};
+    \end{tikzpicture}  
+  \caption[One-input, One-output discrete-time control system block diagram.]{One-input, One-output discrete-time control system block diagram.}
+  \label{fig:DropletSize-ControlSystem}
+\end{figure}
+
+Plant will be modeled using a state-space approach:
+
+\begin{subequations}
+    $x[k+1] = Ax[k] + Bu[k]$ \\
+    $y = Cx[k] + Du[k]$
+\end{subequations}
 
 \begin{align*}
 \begin{bmatrix}
-    \dot x_1 \\
-    \dot x_2\\
-    \dot x_3\\
-    \dot x_4\\
-    \dot x_5
+    x_1[k+1] \\
+    x_2[k+1] \\
+    x_3[k+1] \\
+    x_4[k+1]
 \end{bmatrix}&=
 \begin{bmatrix}
-  a_{11} &  a_{12}&  a_{13}&  a_{14}&  a_{15} \\
-  a_{21} &  a_{22}&  a_{23}&  a_{24}&  a_{25} \\  
-  a_{31} &  a_{32}&  a_{33}&  a_{34}&  a_{35} \\  
-  a_{41} &  a_{42}&  a_{43}&  a_{44}&  a_{45} \\  
-  a_{51} &  a_{52}&  a_{53}&  a_{54}&  a_{55} \\  
+  a_{11} &  a_{12}&  a_{13}&  a_{14}\\
+  a_{21} &  a_{22}&  a_{23}&  a_{24}\\  
+  a_{31} &  a_{32}&  a_{33}&  a_{34}\\  
+  a_{41} &  a_{42}&  a_{43}&  a_{44}
 \end{bmatrix} 
 %\label{eq:stateMatrix} 
 \begin{bmatrix}
      x_1 \\
      x_2\\
      x_3\\
-     x_4\\
-     x_5
+     x_4
 \end{bmatrix}
 +
 %\label{eq:matrixB}
 \begin{bmatrix}
-    b_{11} & b_{12} & b_{13}\\
-    b_{21} & b_{22} & b_{23}\\
-    b_{31} & b_{32} & b_{33}\\
-    b_{41} & b_{42} & b_{43}\\
-    b_{51} & b_{52} & b_{53}   
+    b_{11}\\
+    b_{21}\\
+    b_{31}\\
+    b_{41}
 \end{bmatrix}
 %\label{eq:inputMatrix}
+u_1 
+\end{align*}
+where the coeffiecients of A and B are unknown.
+
+Approximate values for A and B have been identified using MATLAB's System Identification toolbox:
+%
+\begin{align*}
+A=
 \begin{bmatrix}
-    u_1 \\
-    u_2 \\
-    u_1 
-\end{bmatrix}
+  0 &  1 & 0 & 0\\
+  0 &  0 & 1 & 0\\  
+  0 &  0 & 0 & 1\\  
+  -0.5724 & 1.551 & -2.193 & 2.106
+\end{bmatrix} 
+B=
+\begin{bmatrix}
+    -2.4988*10^{-4}\\
+    -3.6800*10^{-4}\\
+    -0.0025\\
+    -0.0031
+\end{bmatrix} 
 \end{align*}
 %
-where the coeffiecients of A and B are unknown.
-\todo[inline]{Approximate numerical value of A matrix}
-\todo[inline]{Approximate numerical value of B matrix}
-\todo[inline]{OPTIONAL: description of $x_1,$ $x_2, \ldots$}
+where the sampling time is 50ms.
 
-\todo[inline]{Provide realistic value of target pressure (in PSI)}
-\todo[inline]{Provide realistic value of target flow rate (in Gal/Acre)}
+A typical pressure range is around 55 to 80psi.
+A typical flow rate range is around 5 to 15 gallons per acre.
+
+\todo[inline]{OPTIONAL: description of $x_1,$ $x_2, \ldots$}
 
 
 %Flow is typically measured in liters per hectare [L/ha].  This measurement take the length of the boom inconsideration.  For liter per minute [L/min]
@@ -246,7 +307,6 @@ where the coeffiecients of A and B are unknown.
 %\begin{equation}
 %    G(z) = \frac{num}{den}
 %\end{equation}
-
 
 
 $u_1$ is our control signal which will be converted to a PWM signal when sent to the nozzle drivers over the local CAN bus. Let the PWM frequency = 20Hz.
@@ -260,7 +320,7 @@ $u_1$ is our control signal which will be converted to a PWM signal when sent to
 %$\dot{x} = Ax + Bu$
 %$y = Cx + Du$
 
-The solution will be implemented on an embedded system \todo{TeeJet ECU or Raspberry Pi?}.
+The solution will be implemented on an embedded system.
 
 \section{Deliverables}
 \label{sec:deliverables}
