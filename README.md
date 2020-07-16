@@ -16,6 +16,13 @@
 * Any update on the data on the spraying machine operations that are publicly available 
 * Go over the problem description and come up with specific inputs and outputs 
 
+## Meeting - 07-03-2020
+
+**Minutes**
+
+* Need to add sample values for A and B matricies 
+* Need sample values for target pressure and flow
+* Use U.S. units instead of SI units
 
 
 
