@@ -46,7 +46,7 @@ Farming chemicals are regulated by the government which certifies the chemical f
 Flow rate controllers and sprayers can all be manufactured by different companies.  This makes it very difficult to come up 
 with a Droplet Size Controller design that will perform on all machines without developing a unique system for every configuration.
 
-Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the block diagram of a two-input two-output discrete-time control system block diagram, where  $D_2(z),$ $G(z),$ $x_2^{[d]},$ and $x_2$ are assumed to be unknown.
+Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the block diagram of a two-input two-output discrete-time control system block diagram, where  $D_2(z),$ $G(z),$ $y_2^{[d]},$ and $y_2$ are assumed to be unknown.
 %
 
 \begin{figure}
@@ -69,11 +69,11 @@ Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the block diagram of a 
 
       % Connections 
       \draw[latex-]
-      (sum.west)-- node[midway,above]{$x_1^{[d]}$}++(-2*\smgrid,0)node[anchor=east]{Target pressure};
+      (sum.west)-- node[midway,above]{$y_1^{[d]}$}++(-2*\smgrid,0)node[anchor=east]{Target pressure};
       \draw
       (sum.-165)node[left]{$+$};
       \draw[latex-]
-      (sum3.west)-- node[midway,above]{$x_2^{[d]}$}++(-4*\smgrid,0)node[anchor=east]{Target flow rate};
+      (sum3.west)-- node[midway,above]{$y_2^{[d]}$}++(-4*\smgrid,0)node[anchor=east]{Target flow rate};
       \draw
       (sum3.-165)node[left]{$+$};
       
@@ -100,7 +100,7 @@ Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the block diagram of a 
       \draw[-latex]
       (sum2.west) -- (H2.east);
       \draw[-latex]
-      (H2.west) -| node[near start,above]{$x_2$} (sum3.south)node[anchor=north east]{$-$}; 
+      (H2.west) -| node[near start,above]{$y_2$} (sum3.south)node[anchor=north east]{$-$}; 
       
       \draw[-latex]
       (sum1.west) -- (H1.east);
@@ -136,10 +136,10 @@ Figure~\ref{fig:twoInputTwoOutputDT-ControlSystem} shows the block diagram of a 
     \toprule[1.5pt]
     Signal& Description& Unit\\
     \toprule
-    $x_1^{[d]}$ & Target pressure & [psi]\\
-    $x_2^{[d]}$ & Target flow rate& [GPA]\\
-    $x_1$ & Actual pressure & [psi]\\
-    $x_2$ & Actual flow rate& [GPA]\\
+    $y_1^{[d]}$ & Target pressure & [psi]\\
+    $y_2^{[d]}$ & Target flow rate& [GPA]\\
+    $y_1$ & Actual pressure & [psi]\\
+    $y_2$ & Actual flow rate& [GPA]\\
     %$D_1(z)$ & Pressure controller (transfer function)\\
     %$D_2(z)$ & Flow controller (transfer function)\\
     $u_1$ & Duty cycle to solenoids (limited between $0$ and $100$)& [\%]\\
@@ -194,29 +194,29 @@ The control system of the Droplet Size controller can be simplified as in Figure
       % Place nodes
       \node[sum](sum){$\sum$};
       \node[block, text width=2 cm, text centered, right of = sum, node distance=3 cm](D1){Droplet Size (Pressure) Controller $D_1(z)$};
-      \node[block, text width=1 cm, text centered, right of = D1, node distance=4.5 cm](G){Plant $G(z)$};      
-      \node[block, text width=1.5 cm, text centered, below of = D1, node distance=3.0 cm](H1){Pressure sensor $H_1(z)$};
+      \node[block, text width=1 cm, text centered, right of = D1, node distance=2.5 cm](G){Plant $G(z)$};      
+      \node[block, text width=1.5 cm, text centered, below of = D1, node distance=2.0 cm](H1){Pressure sensor $H_1(z)$};
       \node[sum, right of = H1, node distance=2 cm](sum1){$\sum$};      
 
       % Connections 
       \draw[latex-]
-      (sum.west)-- node[midway,above]{$x_1^{[d]}$}++(-2*\smgrid,0)node[anchor=east]{Target pressure};
+      (sum.west)-- node[midway,above]{$y_1^{[d]}$}++(-2*\smgrid,0)node[anchor=east]{Target pressure};
       \draw
       (sum.-165)node[left]{$+$};
       \draw[-latex]
       (sum.east) -- node[midway,above]{$e_1$}(D1.west);
       \draw[-latex]
-      (D1.east) -- node[near start,above]{$u_1$} (G.west);
+      (D1.east) -- node[midway,above]{$u_1$} (G.west);
 
       \draw[-latex]
-      (G.20) -- ++(3*\smgrid,0)node[above,right]{$Y_1(z)$};
+      (G.20) -- ++(2.5*\smgrid,0)node[above,right]{$Y_1(z)$};
       \draw[-latex]
       ($(G.20) + (1.5*\smgrid,0)$)node[fill,circle,inner sep=1.5pt]{} |- (sum1.east)node[very near end,below]{$+$};
       
       \draw[-latex]
       (sum1.west) -- (H1.east);
       \draw[-latex]
-      (H1.west) -|node[near start,above]{$x_1$} (sum.south)node[anchor=north east]{$-$}; 
+      (H1.west) -|node[near start,above]{$y_1$} (sum.south)node[anchor=north east]{$-$}; 
 
       \draw[latex-]
       (sum1.south) -- ++(0,-\smgrid)node[below]{$w_1$};
@@ -231,18 +231,14 @@ The control system of the Droplet Size controller can be simplified as in Figure
       \draw
       ($(D1.north)+(\smgrid,\smgrid)$)node[]{\textcolor{blue}{{\bf Discrete-time control system}}};
     \end{tikzpicture}  
-  \caption[One-input, One-output discrete-time control system block diagram.]{One-input, One-output discrete-time control system block diagram.}
+  \caption[Single-input single-output discrete-time control system block diagram.]{Single-input single-output discrete-time control system block diagram.}
   \label{fig:DropletSize-ControlSystem}
 \end{figure}
 
 Plant will be modeled using a state-space approach:
 
-\begin{subequations}
-    $x[k+1] = Ax[k] + Bu[k]$ \\
-    $y = Cx[k] + Du[k]$
-\end{subequations}
-
-\begin{align*}
+\begin{align}
+  \label{eq:statespaceModel}
 \begin{bmatrix}
     x_1[k+1] \\
     x_2[k+1] \\
@@ -257,11 +253,11 @@ Plant will be modeled using a state-space approach:
 \end{bmatrix} 
 %\label{eq:stateMatrix} 
 \begin{bmatrix}
-     x_1 \\
-     x_2\\
-     x_3\\
-     x_4
-\end{bmatrix}
+  x_1[k] \\
+  x_2[k] \\
+  x_3[k] \\
+  x_4[k]
+  \end{bmatrix}                             
 +
 %\label{eq:matrixB}
 \begin{bmatrix}
@@ -271,35 +267,34 @@ Plant will be modeled using a state-space approach:
     b_{41}
 \end{bmatrix}
 %\label{eq:inputMatrix}
-u_1 
-\end{align*}
-where the coeffiecients of A and B are unknown.
-
-Approximate values for A and B have been identified using MATLAB's System Identification toolbox:
+u_1[k] 
+\end{align}
+%
+where the coefficients of matrices ${\bf A}$ and ${\bf B}$ are unknown.
+\highlight{Approximate values for ${\bf A}$ and ${\bf B}$ have been identified using MATLAB's System Identification toolbox as follows:}
 %
 \begin{align*}
-A=
+{\bf A}=
 \begin{bmatrix}
   0 &  1 & 0 & 0\\
   0 &  0 & 1 & 0\\  
   0 &  0 & 0 & 1\\  
   -0.5724 & 1.551 & -2.193 & 2.106
-\end{bmatrix} 
-B=
+\end{bmatrix},~~ 
+{\bf B}=
 \begin{bmatrix}
-    -2.4988*10^{-4}\\
-    -3.6800*10^{-4}\\
+    -2.4988\times 10^{-4}\\
+    -3.6800\times 10^{-4}\\
     -0.0025\\
     -0.0031
 \end{bmatrix} 
 \end{align*}
 %
-where the sampling time is 50ms.
+where the \highlight{sampling time is 50ms.}
 
-A typical pressure range is around 55 to 80psi.
-A typical flow rate range is around 5 to 15 gallons per acre.
+\highlight{A typical pressure range is around $55$ [psi] to  $80$ [psi]. A typical flow rate range is around $5$ to $15$ gallons per acre.}
 
-\todo[inline]{OPTIONAL: description of $x_1,$ $x_2, \ldots$}
+\todo[inline]{Description of the state variables $x_1,$ $x_2, \ldots$ are not available.}
 
 
 %Flow is typically measured in liters per hectare [L/ha].  This measurement take the length of the boom inconsideration.  For liter per minute [L/min]
@@ -309,7 +304,7 @@ A typical flow rate range is around 5 to 15 gallons per acre.
 %\end{equation}
 
 
-$u_1$ is our control signal which will be converted to a PWM signal when sent to the nozzle drivers over the local CAN bus. Let the PWM frequency = 20Hz.
+Note that $u_1[k]$ for $k=0,1,2,\ldots,$ is our control signal which will be converted to a PWM signal when sent to the nozzle drivers over the local CAN bus. Let the PWM frequency = $20~[\hertz].$
 
 %$D_1(z)$ & Pressure controller (transfer function)\\
 %$D_2(z)$ & Flow controller (transfer function)\\

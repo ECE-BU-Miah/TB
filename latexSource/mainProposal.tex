@@ -1,8 +1,8 @@
 \documentclass[12pt]{article}
 \def\name{Suruz Miah}
 \def\grantName{TeeJet Adaptive Controls Research Project~--~2020}
-\def\proposalTitle{Model-Free Adaptive Flow Rate Control of Heterogeneous Agricultural
-  Spraying Machines}
+\def\proposalTitle{Model-Free Adaptive Controllers for Flow Rate and Droplet
+  Size of Heterogeneous Agricultural Spraying Machines}
 
 
 \def\dept{Electrical and Computer Engineering Department}
@@ -41,7 +41,6 @@
 \usepackage{rotating}
 % \epstopdfsetup{suffix=}
 \usepackage[nottoc,notlot,notlof]{tocbibind} % include References in table of contents
-%\usepackage[table,usenames,dvipsnames]{xcolor}
 \usepackage{xtab}
 \usepackage{siunitx}
 \sisetup{unitsep=\cdot}
@@ -64,7 +63,7 @@
 
 % %% For Preview-latex using commands like C-c C-p C-s for previewing a  section. 
 % \usepackage[active,displaymath,sections,graphics,floats]{preview}
-% % \usepackage[active,displaymath,textmath,sections,graphics,floats]{preview}
+% %%% \usepackage[active,displaymath,textmath,sections,graphics,floats]{preview}
 % \PreviewEnvironment{enumerate}  % enumerate environment in the preview
 % \PreviewEnvironment{tikzpicture} % tikzpicture in the preview 
 
@@ -93,6 +92,9 @@
 %\lfoot{\grantName}   % header at lower left corner
 \lfoot{Application Data Management}   % header at lower left corner
 \rfoot{Control System Technology}   % header at lower right corner
+
+\usepackage[printwatermark]{xwatermark}
+\newwatermark[allpages,color=red!15,angle=45,scale=3,xpos=0,ypos=0]{DRAFT}  % or "firstpage"
 
 
 \begin{document}
