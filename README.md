@@ -24,7 +24,12 @@
 * Need sample values for target pressure and flow
 * Use U.S. units instead of SI units
 
+## Meeting - 07-05-2020
+**Minutes**
 
+* Dr. Miah shared initial results
+* Control signal does opposite of expected
+* Will arrange a meeting with Glenn for next week
 
 
  
