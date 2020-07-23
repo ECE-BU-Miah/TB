@@ -31,5 +31,13 @@
 * Control signal does opposite of expected
 * Will arrange a meeting with Glenn for next week
 
+## Meeting - 07-23-2020
+**Minutes**
 
+ * Ken went through the initial results based on some initial data provided by the company 
+ * Work with more data to validate the model
+ * Publish theoretical results in conference proceedings and/or journals with the company being acknowledged  
+ * Will be working on some senior capstone projects 
+ * Writing formal proposal with the company is yet to be approved
+ * Company will let Dr. Miah know about the next steps. 
  

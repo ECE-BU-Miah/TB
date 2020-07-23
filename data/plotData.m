@@ -60,5 +60,7 @@ figure
 subplot(2,1,1)
 plot(t3_val, modelTest03_Validation.y)
 title('modelTest03\_Validation')
+grid;
 subplot(2,1,2)
 plot(t3_val, modelTest03_Validation.u)
+grid;
